@@ -1,30 +1,30 @@
 class Solution {
 public:
-    vector<vector<string>> groupAnagrams(vector<string>& strs) {
-        
-        // make a hashmap where the sorted string is the key and all
-        // matching anagrams are the values
-
-        unordered_map<string, vector<string>> anagram_list;
-        for (vector<string>::iterator it = strs.begin(); it != strs.end(); ++it) {
-            string sorted_str = *it; 
-            sort(sorted_str.begin(), sorted_str.end());
-            unordered_map<string, vector<string>>::iterator anagrams = anagram_list.find(sorted_str);
-            if (anagrams != anagram_list.end()) {
-                anagrams->second.push_back(*it);
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> num_occurrences_map;
+        for (vector<int>::iterator it = nums.begin(); it != nums.end(); ++it) {
+            if (num_occurrences_map.count(*it) == 0) {
+                num_occurrences_map.insert({*it, 1});
             }
             else {
-                vector<string> vec;
-                vec.push_back(*it);
-                anagram_list.emplace(sorted_str, vec);
+                num_occurrences_map[*it] += 1;
             }
         }
 
-        vector<vector<string>> solution;
-        for (unordered_map<string, vector<string>>::iterator hashmap = anagram_list.begin(); 
-        hashmap != anagram_list.end(); 
-        ++hashmap) {
-            solution.push_back(hashmap->second);
+        vector<vector<int>> nums_with_count(nums.size() + 1, vector<int>());
+        for (unordered_map<int, int>::iterator it = num_occurrences_map.begin(); 
+        it != num_occurrences_map.end(); 
+        ++it) {
+            nums_with_count[it->second].push_back(it->first);
+        }
+
+        vector<int> solution;
+        for (vector<vector<int>>::iterator it = nums_with_count.end() - 1; it != nums_with_count.begin(); --it) {
+            if ((*it).empty()) continue;
+            for (vector<int>::iterator num = (*it).begin(); num != (*it).end(); ++num) {
+                if (solution.size() == k) return solution;
+                solution.push_back(*num);
+            }
         }
 
         return solution;
