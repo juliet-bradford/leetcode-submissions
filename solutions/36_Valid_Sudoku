@@ -1,0 +1,40 @@
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        vector<char> prior_digits;
+        uint BOARD_LENGTH = 9;
+        // horizontal validation
+        for (uint i = 0; i < BOARD_LENGTH; ++i) {
+            for (uint j = 0; j < BOARD_LENGTH; ++j) {
+                if (find(prior_digits.begin(), prior_digits.end(), board[i][j]) != prior_digits.end()) return false;
+                
+                if (board[i][j] != '.') prior_digits.push_back(board[i][j]);
+            }
+            prior_digits.clear();
+        }
+        
+        // vertical validation
+        for (uint i = 0; i < BOARD_LENGTH; ++i) {
+            for (uint j = 0; j < BOARD_LENGTH; ++j) {
+                if (find(prior_digits.begin(), prior_digits.end(), board[j][i]) != prior_digits.end()) return false;
+                if (board[j][i] != '.') prior_digits.push_back(board[j][i]);
+            }
+            prior_digits.clear();
+        }
+
+        // sub-box validation        
+        for (uint i = 0; i < 3; ++i) {
+            for (uint j = 0; j < 3; ++j) {
+                for (uint k = 0; k < 3; ++k) {
+                    for (uint l = 0; l < 3; ++l) {
+                        if (find(prior_digits.begin(), prior_digits.end(), board[3*i + k][3*j + l]) != prior_digits.end()) return false;
+                        if (board[3*i + k][3*j + l] != '.') prior_digits.push_back(board[3*i + k][3*j + l]);
+                    }
+                }
+                prior_digits.clear();
+            }
+        }
+
+        return true;
+    }
+};
