@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        int solution = 0;
+        set<int> nums_set(nums.begin(), nums.end());
+        for (vector<int>::iterator it = nums.begin();
+        it != nums.end();
+        ++it) {
+            if (nums_set.count(*it - 1) == 0) {
+                int count = 0, temp = *it;
+                while (nums_set.count(temp) != 0) {
+                    ++count;
+                    ++temp;
+                }
+                if (count > solution) solution = count;
+            }
+        }
+
+        return solution;
+    }
+};
